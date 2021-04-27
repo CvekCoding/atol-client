@@ -90,6 +90,14 @@ final class Item
      */
     private $userData;
 
+    /**
+     * @var string|null
+     *
+     * @Serializer\Type("string")
+     * @Serializer\SerializedName("nomenclature_code")
+     */
+    private $nomenclature;
+
     public function __construct(
         string $name,
         float $price,
@@ -234,6 +242,18 @@ final class Item
     public function setUserData(?string $userData): self
     {
         $this->userData = $userData;
+
+        return $this;
+    }
+
+    public function getNomenclature(): ?string
+    {
+        return $this->nomenclature;
+    }
+
+    public function setNomenclature(?string $nomenclature): self
+    {
+        $this->nomenclature = $nomenclature;
 
         return $this;
     }
