@@ -1,6 +1,6 @@
 <?php
 
-namespace Lamoda\AtolClient\V4\DTO\Report;
+namespace Lamoda\AtolClient\V5\DTO\Report;
 
 use JMS\Serializer\Annotation as Serializer;
 
