@@ -23,7 +23,7 @@ final class RegisterResponse
     /**
      * @var SplittedReceipt[]|null
      *
-     * @Serializer\Type("array<'Lamoda\AtolClient\V5\DTO\Register\SplittedReceipt'>")
+     * @Serializer\Type("array<Lamoda\AtolClient\V5\DTO\Register\SplittedReceipt>")
      */
     private $split_receipt_data;
 
