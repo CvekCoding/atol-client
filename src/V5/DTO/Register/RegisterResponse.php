@@ -21,11 +21,12 @@ final class RegisterResponse
     private $uuid;
 
     /**
-     * @var SplittedReceipt[]|null
+     * @var SplitReceipt[]|null
      *
-     * @Serializer\Type("array<Lamoda\AtolClient\V5\DTO\Register\SplittedReceipt>")
+     * @Serializer\Type("array<Lamoda\AtolClient\V5\DTO\Register\SplitReceipt>")
+     * @SerializedName("split_receipt_data")
      */
-    private $split_receipt_data;
+    private $splitReceipts;
 
     /**
      * @var Status | null
@@ -39,9 +40,9 @@ final class RegisterResponse
         return $this->uuid;
     }
 
-    public function getSplitReceiptData(): ?array
+    public function getSplitReceipts(): ?array
     {
-        return $this->split_receipt_data;
+        return $this->splitReceipts;
     }
 
     public function getStatus(): ?Status
