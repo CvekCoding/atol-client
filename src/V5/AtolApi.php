@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Lamoda\AtolClient\V4;
+namespace Lamoda\AtolClient\V5;
 
 use Lamoda\AtolClient\Converter\ObjectConverter;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\RequestOptions;
-use Lamoda\AtolClient\V4\DTO\Correction\CorrectionRequest;
-use Lamoda\AtolClient\V4\DTO\Correction\CorrectionResponse;
-use Lamoda\AtolClient\V4\DTO\GetToken\GetTokenRequest;
-use Lamoda\AtolClient\V4\DTO\GetToken\GetTokenResponse;
-use Lamoda\AtolClient\V4\DTO\Register\RegisterRequest;
-use Lamoda\AtolClient\V4\DTO\Register\RegisterResponse;
-use Lamoda\AtolClient\V4\DTO\Report\ReportResponse;
+use Lamoda\AtolClient\V5\DTO\Correction\CorrectionRequest;
+use Lamoda\AtolClient\V5\DTO\Correction\CorrectionResponse;
+use Lamoda\AtolClient\V5\DTO\GetToken\GetTokenRequest;
+use Lamoda\AtolClient\V5\DTO\GetToken\GetTokenResponse;
+use Lamoda\AtolClient\V5\DTO\Register\RegisterRequest;
+use Lamoda\AtolClient\V5\DTO\Register\RegisterResponse;
+use Lamoda\AtolClient\V5\DTO\Report\ReportResponse;
 
 final class AtolApi
 {
@@ -133,7 +133,7 @@ final class AtolApi
         // Prepare request:
         $body = $this->parseBody($body);
         $path = trim($path, '/');
-        $uri = "{$this->baseUri}/v4/$path/";
+        $uri = "{$this->baseUri}/v5/$path/";
 
         $headers = array_merge($headers, [
             'Content-Type' => 'application/json',

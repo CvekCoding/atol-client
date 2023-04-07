@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Lamoda\AtolClient\Tests\Integrational\V4;
+namespace Lamoda\AtolClient\Tests\Integrational\V5;
 
 use GuzzleHttp\Client;
 use Lamoda\AtolClient\Tests\Helper\AtolApiFactory;
-use Lamoda\AtolClient\Tests\TestCase\V4\AtolApiTestCase;
-use Lamoda\AtolClient\V4\AtolApi;
+use Lamoda\AtolClient\Tests\TestCase\V5\AtolApiTestCase;
+use Lamoda\AtolClient\V5\AtolApi;
 
 final class AtolApiTest extends AtolApiTestCase
 {
@@ -28,9 +28,9 @@ final class AtolApiTest extends AtolApiTestCase
     {
         parent::setUp();
 
-        $this->login = getenv('ATOL_API_TEST_ATOL_LOGIN');
-        $this->password = getenv('ATOL_API_TEST_ATOL_PASSWORD');
-        $this->groupCode = getenv('ATOL_API_TEST_ATOL_GROUP_CODE');
+        $this->login = getenv('ATOL_API_V5_TEST_LOGIN');
+        $this->password = getenv('ATOL_API_V5_TEST_PASSWORD');
+        $this->groupCode = getenv('ATOL_API_V5_TEST_GROUP_CODE');
 
         if (
             empty($this->login)
@@ -38,9 +38,9 @@ final class AtolApiTest extends AtolApiTestCase
             || empty($this->groupCode)
         ) {
             $this->markTestSkipped(
-                'Envs ATOL_API_TEST_ATOL_LOGIN, ' .
-                'ATOL_API_TEST_ATOL_PASSWORD and ' .
-                'ATOL_API_TEST_ATOL_GROUP_CODE must be defined'
+                'Envs ATOL_API_V5_TEST_LOGIN, ' .
+                'ATOL_API_V5_TEST_PASSWORD and ' .
+                'ATOL_API_V5_TEST_GROUP_CODE must be defined'
             );
         }
     }
@@ -49,7 +49,7 @@ final class AtolApiTest extends AtolApiTestCase
     {
         $client = new Client();
 
-        return AtolApiFactory::createV4($client, [], 'https://testonline.atol.ru/possystem/');
+        return AtolApiFactory::createV5($client, [], 'https://testonline.atol.ru/possystem/');
     }
 
     protected function getLogin(): string
@@ -82,12 +82,12 @@ final class AtolApiTest extends AtolApiTestCase
         // nothing
     }
 
-    protected function setUpTestSellCorrection(): void
+    protected function setUpTestSellWithInvalidRequest(): void
     {
         // nothing
     }
 
-    protected function setUpTestSellWithInvalidRequest(): void
+    protected function setUpTestSellCorrection(): void
     {
         // nothing
     }

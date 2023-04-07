@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Lamoda\AtolClient\Tests\Functional\V4;
+namespace Lamoda\AtolClient\Tests\Functional\V5;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Lamoda\AtolClient\Tests\Helper\AtolApiFactory;
-use Lamoda\AtolClient\Tests\TestCase\V4\AtolApiTestCase;
-use Lamoda\AtolClient\V4\AtolApi;
+use Lamoda\AtolClient\Tests\TestCase\V5\AtolApiTestCase;
+use Lamoda\AtolClient\V5\AtolApi;
 
 final class AtolApiTest extends AtolApiTestCase
 {
@@ -30,7 +30,7 @@ final class AtolApiTest extends AtolApiTestCase
 
         $response = $this->api->report('test', '123', '123');
 
-        $this->assertEquals('v4-online-atol-ru_4179', $response->getGroupCode());
+        $this->assertEquals('v5-online-atol-ru', $response->getGroupCode());
         $this->assertEquals('inttest-agent', $response->getDaemonCode());
         $this->assertEquals('KKT000120', $response->getDeviceCode());
         $this->assertEquals('', $response->getCallbackUrl());
@@ -60,7 +60,7 @@ final class AtolApiTest extends AtolApiTestCase
             'handler' => $handlerStack,
         ]);
 
-        $this->api = AtolApiFactory::createV4($client, [], 'http://test_atol');
+        $this->api = AtolApiFactory::createV5($client, [], 'http://test_atol');
 
         return $this->api;
     }
@@ -96,16 +96,16 @@ final class AtolApiTest extends AtolApiTestCase
         $this->appendSuccessRegisterResponse();
     }
 
-    protected function setUpTestSellCorrection(): void
-    {
-        $this->appendSuccessTokenResponse();
-        $this->appendSuccessCorrectionResponse();
-    }
-
     protected function setUpTestSellWithInvalidRequest(): void
     {
         $this->appendSuccessTokenResponse();
         $this->appendErrorRegisterResponse();
+    }
+
+    protected function setUpTestSellCorrection(): void
+    {
+        $this->appendSuccessTokenResponse();
+        $this->appendSuccessCorrectionResponse();
     }
 
     protected function setUpTestSellCorrectionWithInvalidRequest(): void
@@ -113,6 +113,7 @@ final class AtolApiTest extends AtolApiTestCase
         $this->appendSuccessTokenResponse();
         $this->appendErrorRegisterResponse();
     }
+
 
     protected function setUpTestSellRefund(): void
     {
@@ -243,7 +244,7 @@ JSON
   "uuid": "3b81e0a1-d080-4472-93d8-76666f3df68f",
   "status": "done",
   "error": null,
-  "group_code": "v4-online-atol-ru_4179",
+  "group_code": "v5-online-atol-ru",
   "daemon_code": "inttest-agent",
   "device_code": "KKT000120",
   "callback_url": "",

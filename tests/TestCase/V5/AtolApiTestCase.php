@@ -2,32 +2,36 @@
 
 declare(strict_types=1);
 
-namespace Lamoda\AtolClient\Tests\TestCase\V4;
+namespace Lamoda\AtolClient\Tests\TestCase\V5;
 
-use Lamoda\AtolClient\V4\AtolApi;
-use Lamoda\AtolClient\V4\DTO\Correction\Correction;
-use Lamoda\AtolClient\V4\DTO\Correction\CorrectionInfo;
-use Lamoda\AtolClient\V4\DTO\Correction\CorrectionRequest;
-use Lamoda\AtolClient\V4\DTO\Correction\CorrectionType;
-use Lamoda\AtolClient\V4\DTO\GetToken\GetTokenRequest;
-use Lamoda\AtolClient\V4\DTO\Register\AgentInfo;
-use Lamoda\AtolClient\V4\DTO\Register\AgentType;
-use Lamoda\AtolClient\V4\DTO\Register\Client as ClientDto;
-use Lamoda\AtolClient\V4\DTO\Register\Company;
-use Lamoda\AtolClient\V4\DTO\Register\Item;
-use Lamoda\AtolClient\V4\DTO\Register\PayingAgent;
-use Lamoda\AtolClient\V4\DTO\Register\Payment;
-use Lamoda\AtolClient\V4\DTO\Register\PaymentMethod;
-use Lamoda\AtolClient\V4\DTO\Register\PaymentObject;
-use Lamoda\AtolClient\V4\DTO\Register\PaymentType;
-use Lamoda\AtolClient\V4\DTO\Register\Receipt;
-use Lamoda\AtolClient\V4\DTO\Register\RegisterRequest;
-use Lamoda\AtolClient\V4\DTO\Register\Status as RegisterStatus;
-use Lamoda\AtolClient\V4\DTO\Register\SupplierInfo;
-use Lamoda\AtolClient\V4\DTO\Register\Vat;
-use Lamoda\AtolClient\V4\DTO\Register\VatType;
-use Lamoda\AtolClient\V4\DTO\Report\Status;
-use Lamoda\AtolClient\V4\DTO\Shared\ErrorType;
+use Lamoda\AtolClient\V5\DTO\Correction\Correction;
+use Lamoda\AtolClient\V5\DTO\Correction\CorrectionInfo;
+use Lamoda\AtolClient\V5\DTO\Correction\CorrectionRequest;
+use Lamoda\AtolClient\V5\DTO\Correction\CorrectionType;
+use Lamoda\AtolClient\V5\AtolApi;
+use Lamoda\AtolClient\V5\DTO\GetToken\GetTokenRequest;
+use Lamoda\AtolClient\V5\DTO\Register\AgentInfo;
+use Lamoda\AtolClient\V5\DTO\Register\AgentType;
+use Lamoda\AtolClient\V5\DTO\Register\Client as ClientDto;
+use Lamoda\AtolClient\V5\DTO\Register\Company;
+use Lamoda\AtolClient\V5\DTO\Register\Item;
+use Lamoda\AtolClient\V5\DTO\Register\MarkCode;
+use Lamoda\AtolClient\V5\DTO\Register\Measure;
+use Lamoda\AtolClient\V5\DTO\Register\PayingAgent;
+use Lamoda\AtolClient\V5\DTO\Register\Payment;
+use Lamoda\AtolClient\V5\DTO\Register\PaymentMethod;
+use Lamoda\AtolClient\V5\DTO\Register\PaymentObject;
+use Lamoda\AtolClient\V5\DTO\Register\PaymentType;
+use Lamoda\AtolClient\V5\DTO\Register\Receipt;
+use Lamoda\AtolClient\V5\DTO\Register\ReceivePaymentsOperator;
+use Lamoda\AtolClient\V5\DTO\Register\RegisterRequest;
+use Lamoda\AtolClient\V5\DTO\Register\Sno;
+use Lamoda\AtolClient\V5\DTO\Register\Status as RegisterStatus;
+use Lamoda\AtolClient\V5\DTO\Register\SupplierInfo;
+use Lamoda\AtolClient\V5\DTO\Register\Vat;
+use Lamoda\AtolClient\V5\DTO\Register\VatType;
+use Lamoda\AtolClient\V5\DTO\Report\Status;
+use Lamoda\AtolClient\V5\DTO\Shared\ErrorType;
 use PHPUnit\Framework\TestCase;
 
 abstract class AtolApiTestCase extends TestCase
@@ -51,9 +55,9 @@ abstract class AtolApiTestCase extends TestCase
 
     abstract protected function setUpTestSell(): void;
 
-    abstract protected function setUpTestSellCorrection(): void;
-
     abstract protected function setUpTestSellWithInvalidRequest(): void;
+
+    abstract protected function setUpTestSellCorrection(): void;
 
     abstract protected function setUpTestSellCorrectionWithInvalidRequest(): void;
 
@@ -225,7 +229,7 @@ abstract class AtolApiTestCase extends TestCase
 
         $registerResponse = $this->api->sell($this->getGroupCode(), $token, $request);
 
-        $timeout = 300;
+        $timeout = 700;
 
         $start = time();
         while (time() - $start < $timeout) {
@@ -248,7 +252,13 @@ abstract class AtolApiTestCase extends TestCase
             }
 
             if ($response->getStatus() == Status::FAIL()) {
-                $this->fail('Fiscal document is failed');
+                $error = $response->getError();
+                $errorText = null;
+                if (null !== $error) {
+                    $errorText = $error->getText();
+                }
+
+                $this->fail('Fiscal document is failed: ' . $errorText);
             }
         }
 
@@ -270,50 +280,20 @@ abstract class AtolApiTestCase extends TestCase
         return $response->getToken();
     }
 
-    private function createSellCorrectionRequest(): CorrectionRequest
-    {
-        return new CorrectionRequest(
-            'test-' . md5((string) microtime(true)),
-            new Correction(
-                new Company(
-                    'test@test.ru',
-                    '5544332219',
-                    'https://v4.online.atol.ru'
-                ),
-                new CorrectionInfo(
-                    CorrectionType::SELF(),
-                    new \DateTime(),
-                    'num1',
-                    'Что-то поправлено'
-                ),
-                [
-                    new Payment(
-                        PaymentType::ELECTRONIC(),
-                        1000.1
-                    ),
-                ],
-                [new Vat(
-                    VatType::VAT120(),
-                    166.68
-                )]
-            ),
-            new \DateTime()
-        );
-    }
-
     private function createRegisterRequest(): RegisterRequest
     {
         return new RegisterRequest(
             'test-' . md5((string) microtime(true)),
             new Receipt(
                 new ClientDto(
-                    'test@test.ru',
-                    ''
+                    'test',
+                    'none'
                 ),
                 new Company(
                     'test@test.ru',
                     '5544332219',
-                    'https://v4.online.atol.ru'
+                    'https://v5.online.atol.ru',
+                    Sno::OSN()
                 ),
                 [
                     (new Item(
@@ -325,14 +305,17 @@ abstract class AtolApiTestCase extends TestCase
                         new Vat(
                             VatType::VAT120(),
                             166.68
-                        )
+                        ),
+                        Measure::PIECE(),
+                        PaymentObject::PAYMENT()
                     ))
-                        ->setMeasurementUnit('шт.')
-                        ->setPaymentObject(PaymentObject::COMMODITY())
                         ->setAgentInfo(
                             (new AgentInfo(AgentType::PAYING_AGENT()))
                                 ->setPayingAgent(new PayingAgent(
                                     'test',
+                                    ['+79101234567']
+                                ))
+                                ->setReceivePaymentsOperator(new ReceivePaymentsOperator(
                                     ['+79101234567']
                                 ))
                         )
@@ -342,7 +325,8 @@ abstract class AtolApiTestCase extends TestCase
                                 'Test supplier',
                                 '7705935687'
                             )
-                        ),
+                        )
+                        ->setMarkCode(new MarkCode(base64_encode('test_mark_code'), MarkCode::GS1M)),
                 ],
                 [
                     new Payment(
@@ -363,12 +347,13 @@ abstract class AtolApiTestCase extends TestCase
             new Receipt(
                 new ClientDto(
                     'test@test.ru',
-                    ''
+                    null
                 ),
                 new Company(
                     'test@test.ru',
                     '5544332219',
-                    'https://v4.online.atol.ru'
+                    'https://v5.online.atol.ru',
+                    Sno::OSN()
                 ),
                 [
                     new Item(
@@ -380,7 +365,9 @@ abstract class AtolApiTestCase extends TestCase
                         new Vat(
                             VatType::VAT120(),
                             166.68
-                        )
+                        ),
+                        Measure::PIECE(),
+                        PaymentObject::COMMODITY()
                     ),
                 ],
                 [
@@ -390,6 +377,51 @@ abstract class AtolApiTestCase extends TestCase
                     ),
                 ],
                 -1000.1
+            ),
+            new \DateTime()
+        );
+    }
+
+    private function createSellCorrectionRequest(): CorrectionRequest
+    {
+        return new CorrectionRequest(
+            'test-' . md5((string) microtime(true)),
+            new Correction(
+                new Company(
+                    'test@test.ru',
+                    '5544332219',
+                    'https://v4.online.atol.ru',
+                    Sno::OSN()
+                ),
+                (new CorrectionInfo(
+                    CorrectionType::SELF()
+                )),
+                [
+                    new Item(
+                        'Test item',
+                        1000.1,
+                        1,
+                        1000.1,
+                        PaymentMethod::FULL_PAYMENT(),
+                        new Vat(
+                            VatType::VAT120(),
+                            166.68
+                        ),
+                        Measure::PIECE(),
+                        PaymentObject::COMMODITY()
+                    ),
+                ],
+                [
+                    new Payment(
+                        PaymentType::ELECTRONIC(),
+                        1000.1
+                    ),
+                ],
+                [new Vat(
+                    VatType::VAT120(),
+                    166.68
+                )],
+                1000.1
             ),
             new \DateTime()
         );

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Lamoda\AtolClient\V4\DTO\Register;
+namespace Lamoda\AtolClient\V5\DTO\Register;
 
 use JMS\Serializer\Annotation as Serializer;
 
-final class MoneyTransferOperator
+final class SupplierInfo
 {
     /**
      * @var array
@@ -25,13 +25,14 @@ final class MoneyTransferOperator
      *
      * @Serializer\Type("string")
      */
-    private $address;
-    /**
-     * @var string
-     *
-     * @Serializer\Type("string")
-     */
     private $inn;
+
+    public function __construct(array $phones, string $name, string $inn)
+    {
+        $this->phones = $phones;
+        $this->name = $name;
+        $this->inn = $inn;
+    }
 
     public function getPhones(): array
     {
@@ -53,18 +54,6 @@ final class MoneyTransferOperator
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getAddress(): string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
 
         return $this;
     }

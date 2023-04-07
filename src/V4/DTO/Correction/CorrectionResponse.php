@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Lamoda\AtolClient\V4\DTO\Register;
+namespace Lamoda\AtolClient\V4\DTO\Correction;
 
 use JMS\Serializer\Annotation as Serializer;
+use Lamoda\AtolClient\V4\DTO\Register\Status;
 use Lamoda\AtolClient\V4\DTO\Shared\ErrorTrait;
 use Lamoda\AtolClient\V4\DTO\Shared\TimestampTrait;
 
-final class RegisterResponse
+final class CorrectionResponse
 {
     use TimestampTrait;
     use ErrorTrait;
@@ -21,14 +22,6 @@ final class RegisterResponse
     private $uuid;
 
     /**
-     * @var SplitReceipt[]|null
-     *
-     * @Serializer\SerializedName("split_receipt_data")
-     * @Serializer\Type("array<Lamoda\AtolClient\V4\DTO\Register\SplitReceipt>")
-     */
-    private $splitReceipts;
-
-    /**
      * @var Status | null
      *
      * @Serializer\Type("Enum<'Lamoda\AtolClient\V4\DTO\Register\Status'>")
@@ -38,11 +31,6 @@ final class RegisterResponse
     public function getUuid(): ?string
     {
         return $this->uuid;
-    }
-
-    public function getSplitReceipts(): ?array
-    {
-        return $this->splitReceipts;
     }
 
     public function getStatus(): ?Status

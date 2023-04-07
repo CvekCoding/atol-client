@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lamoda\AtolClient\V4\DTO\Register;
+namespace Lamoda\AtolClient\V5\DTO\Register;
 
 use JMS\Serializer\Annotation as Serializer;
 

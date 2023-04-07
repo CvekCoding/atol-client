@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Lamoda\AtolClient\V4\DTO\Register;
+namespace Lamoda\AtolClient\V5\DTO\Register;
 
 use JMS\Serializer\Annotation as Serializer;
-use Lamoda\AtolClient\V4\DTO\Shared\ErrorTrait;
-use Lamoda\AtolClient\V4\DTO\Shared\TimestampTrait;
+use Lamoda\AtolClient\V5\DTO\Shared\ErrorTrait;
+use Lamoda\AtolClient\V5\DTO\Shared\TimestampTrait;
 
 final class RegisterResponse
 {
@@ -24,14 +24,14 @@ final class RegisterResponse
      * @var SplitReceipt[]|null
      *
      * @Serializer\SerializedName("split_receipt_data")
-     * @Serializer\Type("array<Lamoda\AtolClient\V4\DTO\Register\SplitReceipt>")
+     * @Serializer\Type("array<Lamoda\AtolClient\V5\DTO\Register\SplitReceipt>")
      */
     private $splitReceipts;
 
     /**
      * @var Status | null
      *
-     * @Serializer\Type("Enum<'Lamoda\AtolClient\V4\DTO\Register\Status'>")
+     * @Serializer\Type("Enum<'Lamoda\AtolClient\V5\DTO\Register\Status'>")
      */
     private $status;
 

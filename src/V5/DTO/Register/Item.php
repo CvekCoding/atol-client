@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lamoda\AtolClient\V4\DTO\Register;
+namespace Lamoda\AtolClient\V5\DTO\Register;
 
 use JMS\Serializer\Annotation as Serializer;
 
@@ -37,25 +37,25 @@ final class Item
     private $sum;
 
     /**
-     * @var string|null
+     * @var Measure
      *
-     * @Serializer\Type("string")
-     * @Serializer\SerializedName("measurement_unit")
+     * @Serializer\Type("Enum<'Lamoda\AtolClient\V5\DTO\Register\Measure', 'integer'>")
+     * @Serializer\SerializedName("measure")
      */
-    private $measurementUnit;
+    private $measure;
 
     /**
      * @var PaymentMethod
      *
-     * @Serializer\Type("Enum<'Lamoda\AtolClient\V4\DTO\Register\PaymentMethod'>")
+     * @Serializer\Type("Enum<'Lamoda\AtolClient\V5\DTO\Register\PaymentMethod'>")
      * @Serializer\SerializedName("payment_method")
      */
     private $paymentMethod;
 
     /**
-     * @var PaymentObject|null
+     * @var PaymentObject
      *
-     * @Serializer\Type("Enum<'Lamoda\AtolClient\V4\DTO\Register\PaymentObject'>")
+     * @Serializer\Type("Enum<'Lamoda\AtolClient\V5\DTO\Register\PaymentObject', 'integer'>")
      * @Serializer\SerializedName("payment_object")
      */
     private $paymentObject;
@@ -63,14 +63,14 @@ final class Item
     /**
      * @var Vat
      *
-     * @Serializer\Type("Lamoda\AtolClient\V4\DTO\Register\Vat")
+     * @Serializer\Type("Lamoda\AtolClient\V5\DTO\Register\Vat")
      */
     private $vat;
 
     /**
      * @var AgentInfo|null
      *
-     * @Serializer\Type("Lamoda\AtolClient\V4\DTO\Register\AgentInfo")
+     * @Serializer\Type("Lamoda\AtolClient\V5\DTO\Register\AgentInfo")
      * @Serializer\SerializedName("agent_info")
      */
     private $agentInfo;
@@ -78,10 +78,18 @@ final class Item
     /**
      * @var SupplierInfo|null
      *
-     * @Serializer\Type("Lamoda\AtolClient\V4\DTO\Register\SupplierInfo")
+     * @Serializer\Type("Lamoda\AtolClient\V5\DTO\Register\SupplierInfo")
      * @Serializer\SerializedName("supplier_info")
      */
     private $supplierInfo;
+
+    /**
+     * @var MarkCode|null
+     *
+     * @Serializer\Type("Lamoda\AtolClient\V5\DTO\Register\MarkCode")
+     * @Serializer\SerializedName("mark_code")
+     */
+    private $markCode;
 
     /**
      * @var string|null
@@ -104,7 +112,9 @@ final class Item
         float $quantity,
         float $sum,
         PaymentMethod $paymentMethod,
-        Vat $vat
+        Vat $vat,
+        Measure $measure,
+        PaymentObject $paymentObject
     ) {
         $this->name = $name;
         $this->price = $price;
@@ -112,7 +122,22 @@ final class Item
         $this->sum = $sum;
         $this->paymentMethod = $paymentMethod;
         $this->vat = $vat;
+        $this->measure = $measure;
+        $this->paymentObject = $paymentObject;
     }
+
+    public function getMarkCode(): ?MarkCode
+    {
+        return $this->markCode;
+    }
+
+    public function setMarkCode(?MarkCode $markCode): self
+    {
+        $this->markCode = $markCode;
+
+        return $this;
+    }
+
 
     public function getName(): string
     {
@@ -162,14 +187,14 @@ final class Item
         return $this;
     }
 
-    public function getMeasurementUnit(): ?string
+    public function getMeasure(): Measure
     {
-        return $this->measurementUnit;
+        return $this->measure;
     }
 
-    public function setMeasurementUnit(?string $measurementUnit): self
+    public function setMeasure(Measure $measure): self
     {
-        $this->measurementUnit = $measurementUnit;
+        $this->measure = $measure;
 
         return $this;
     }
@@ -186,12 +211,12 @@ final class Item
         return $this;
     }
 
-    public function getPaymentObject(): ?PaymentObject
+    public function getPaymentObject(): PaymentObject
     {
         return $this->paymentObject;
     }
 
-    public function setPaymentObject(?PaymentObject $paymentObject): self
+    public function setPaymentObject(PaymentObject $paymentObject): self
     {
         $this->paymentObject = $paymentObject;
 
