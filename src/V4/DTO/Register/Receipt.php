@@ -51,6 +51,21 @@ final class Receipt
     private $total;
 
     /**
+     * @var string|null
+     *
+     * @Serializer\Type("string")
+     */
+    private $cashier;
+
+    /**
+     * @var string|null
+     *
+     * @Serializer\Type("string")
+     * @Serializer\SerializedName("cashier_inn")
+     */
+    private $cashierInn;
+
+    /**
      * @param Client $client
      * @param Company $company
      * @param Item[] $items
@@ -158,6 +173,30 @@ final class Receipt
     public function setTotal(float $total): self
     {
         $this->total = $total;
+
+        return $this;
+    }
+
+    public function getCashier(): ?string
+    {
+        return $this->cashier;
+    }
+
+    public function setCashier(?string $cashier): self
+    {
+        $this->cashier = $cashier;
+
+        return $this;
+    }
+
+    public function getCashierInn(): ?string
+    {
+        return $this->cashierInn;
+    }
+
+    public function setCashierInn(?string $cashierInn): self
+    {
+        $this->cashierInn = $cashierInn;
 
         return $this;
     }
