@@ -66,19 +66,29 @@ final class Receipt
     private $cashierInn;
 
     /**
+     * @var bool
+     *
+     * @Serializer\Type("boolean")
+     * @Serializer\SerializedName("internet")
+     */
+    private $internet;
+
+    /**
      * @param Client $client
      * @param Company $company
      * @param Item[] $items
      * @param Payment[] $payments
      * @param float $total
+     * @param bool $internet
      */
-    public function __construct(Client $client, Company $company, array $items, array $payments, float $total)
+    public function __construct(Client $client, Company $company, array $items, array $payments, float $total, bool $internet)
     {
         $this->client = $client;
         $this->company = $company;
         $this->items = $items;
         $this->payments = $payments;
         $this->total = $total;
+        $this->internet = $internet;
     }
 
     public function getClient(): Client
@@ -197,6 +207,18 @@ final class Receipt
     public function setCashierInn(?string $cashierInn): self
     {
         $this->cashierInn = $cashierInn;
+
+        return $this;
+    }
+
+    public function isInternet(): bool
+    {
+        return $this->internet;
+    }
+
+    public function setInternet(bool $internet): self
+    {
+        $this->internet = $internet;
 
         return $this;
     }
